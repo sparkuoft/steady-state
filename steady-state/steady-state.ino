@@ -79,9 +79,9 @@ void flashBackToStart() {
   }
 }
 
-bool delayAndCheckForCheating(unsigned long value, unsigned long step_size = 50) {
-  for (unsigned long i = 0; i < value; i += step_size) {
-    delay(step_size);
+bool delayAndCheckForCheating(unsigned long value) {
+  unsigned long begin = millis();
+  while (millis() - begin < value) {
     if (!okayToStart()) {
       return true; // cheating!
     }
