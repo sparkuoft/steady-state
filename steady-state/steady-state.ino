@@ -80,7 +80,7 @@ void flashBackToStart() {
 }
 
 bool delayAndCheckForCheating(unsigned long value, unsigned long step_size = 50) {
-  for (int i = 0; i < value; i += step_size) {
+  for (unsigned long i = 0; i < value; i += step_size) {
     delay(step_size);
     if (!okayToStart()) {
       return true; // cheating!
