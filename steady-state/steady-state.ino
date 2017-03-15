@@ -90,7 +90,7 @@ bool delayAndCheckForCheating(unsigned long value) {
 }
 
 bool doCountdown() {
-  int pins[] = {READY, SET, GO};
+  int pins[] = {READY, SET};
   for (int i = 0; i < sizeof(pins)/sizeof(int); i++) {
     setCountdown(pins[i]);
     if (delayAndCheckForCheating(1000)) {
@@ -98,6 +98,7 @@ bool doCountdown() {
       return false;
     }
   }
+  setCountdown(GO);
   return true;
 }
 
