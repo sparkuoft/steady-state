@@ -62,11 +62,11 @@ void setup() {
 }
 
 bool okayToStart() {
-  return (!digitalRead(TAPE[0]) ||
-          !digitalRead(TAPE[1]) ||
-          !digitalRead(END[0]) ||
-          !digitalRead(END[1]) ||
-          digitalRead(BEGIN[0]) ||
+  return (!digitalRead(TAPE[0]) &&
+          !digitalRead(TAPE[1]) &&
+          !digitalRead(END[0]) &&
+          !digitalRead(END[1]) &&
+          digitalRead(BEGIN[0]) &&
           digitalRead(BEGIN[1]));
 }
 
@@ -146,11 +146,4 @@ void loop() {
   doWinSequence(winner);
   setCountdown(NONE);  
 }
-
-
-
-
-
-
-
 
