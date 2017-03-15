@@ -29,10 +29,10 @@ const int TAPE[2] = {13, 14};
 // END PIN MAPPINGS
 
 void setCountdown(int value) {
-  int pins[] = {READY, SET, GO, MOVE_TO_START};
-  for (int i = 0; i < sizeof(pins)/sizeof(int); i++) {
-    digitalWrite(pins[i], value == pins[i] ? HIGH : LOW);
-  }
+  digitalWrite(READY, value == READY ? HIGH : LOW);
+  digitalWrite(SET, value == SET ? HIGH : LOW);
+  digitalWrite(GO, value == GO ? HIGH : LOW);
+  digitalWrite(MOVE_TO_START, value == MOVE_TO_START ? HIGH : LOW);
 }
 
 void setup() {
@@ -79,6 +79,8 @@ void flashBackToStart() {
   }
 }
 
+// Returns true if someone tries to cheat (i.e. move their rod) during the delay.
+// Returns false otherwise.
 bool delayAndCheckForCheating(unsigned long value) {
   unsigned long begin = millis();
   while (millis() - begin < value) {
@@ -89,15 +91,12 @@ bool delayAndCheckForCheating(unsigned long value) {
   return false;
 }
 
+// Returns true on success, false if someone moves before the countdown is over
 bool doCountdown() {
-  int pins[] = {READY, SET};
-  for (int i = 0; i < sizeof(pins)/sizeof(int); i++) {
-    setCountdown(pins[i]);
-    if (delayAndCheckForCheating(1000)) {
-      flashBackToStart();
-      return false;
-    }
-  }
+  setCountdown(READY);
+  if (delayAndCheckForCheating(1000)) return false;
+  setCountdown(SET);
+  if (delayAndCheckForCheating(1000)) return false;
   setCountdown(GO);
   return true;
 }
@@ -111,6 +110,8 @@ void waitForStart() {
       bool successfulStart = doCountdown();
       if (successfulStart) {
         return;
+      } else {
+        flashBackToStart();
       }
     }
   }
